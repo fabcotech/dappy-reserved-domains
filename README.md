@@ -8,5 +8,5 @@ Top TLDs with private/brand TLDs tlds.txt https://data.iana.org/TLD/tlds-alpha-b
 # Generate names lists in different formats (json, csv)
 
 ```sh
-node buildPursesForTopDomainNames.js
+npm start
 ```
