@@ -1,9 +1,10 @@
-function run(rawContent, tldContent) {
+function run(rawContent, tldContent, brandsContent) {
   const lines = rawContent.split(/\r?\n/);
   
   const NAMES_TO_PERFORM = 30000;
   const ADDRESS = '';
   const ALSO_RESERVE_GENERIC_CODES = true;
+  const ALSO_RESERVE_BRANDS = true;
   
   const validDomains = {};
   const duplicates = {};
@@ -28,9 +29,9 @@ function run(rawContent, tldContent) {
       invalids[name] = 'length';
     } else if (validDomains[name]) {
       if (!duplicates[name]) {
-        duplicates[name] = [domainName];
+        duplicates[name] = [`DOMAIN ${domainName}`];
       } else {
-        duplicates[name].push(domainName);
+        duplicates[name].push(`DOMAIN ${domainName}`);
       }
     } else {
       validDomains[name] = true;
@@ -55,9 +56,9 @@ function run(rawContent, tldContent) {
         if (validDomains[sanitizedName]) {
           console.warn('generic tld ' + name + ' is duplicate');
           if (!duplicates[sanitizedName]) {
-            duplicates[sanitizedName] = [name];
+            duplicates[sanitizedName] = [`TLD ${name}`];
           } else {
-            duplicates[sanitizedName].push(name);
+            duplicates[sanitizedName].push(`TLD ${name}`);
           }
         } else {
           validDomains[sanitizedName] = true;
@@ -69,6 +70,44 @@ function run(rawContent, tldContent) {
     });
   }
   
+  if (ALSO_RESERVE_BRANDS) {
+    let i = 0;
+    let j = 0;
+    const brandsLines = brandsContent.split('\n').slice(1);
+    const brands = brandsLines.map(a => 
+      a
+        .split(',')[0].toLowerCase()
+        .replace(/"/g, '')
+        .replace(/'/g, '')
+        .replace(/é/g, 'e')
+        .replace(/è/g, 'e')
+        .replace(/!/g, 'e')
+        .replace(/\.com/g, '')
+        .replace(/\./g, '')
+        .replace(/ /g, '')
+        .replace(/-/g, '')
+        .replace(/&/g, 'and')
+        .replace(/-\//g, '')
+    );
+
+    brands.forEach(b => {
+      if (validDomains[b]) {
+        j += 1;
+        if (!duplicates[b]) {
+          duplicates[b] = [`BRAND ${b}`];
+        } else {
+          duplicates[b].push(`BRAND ${b}`);
+        }
+      } else {
+        i += 1;
+        validDomains[b] = true;
+      }
+    });
+
+    console.log(i, 'brands added');
+    console.log(j, 'brands were already reserved');
+  }
+
   return {
     validDomains: Object.fromEntries(
       Object.keys(validDomains).map(id => 

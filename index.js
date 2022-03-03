@@ -3,8 +3,9 @@ const { run } = require('./buildPursesForTopDomainNames');
 
 const csvContent = fs.readFileSync('./top-1m.csv', 'utf8');
 const tldContent = fs.readFileSync('./tlds.txt', 'utf8');
+const brandsContent = fs.readFileSync('./brands.csv', 'utf8');
 
-const { duplicates, invalids, validDomains } = run(csvContent, tldContent);
+const { duplicates, invalids, validDomains } = run(csvContent, tldContent, brandsContent);
 
 fs.writeFileSync('./name-duplicates.json', JSON.stringify(duplicates, null, 2));
 
