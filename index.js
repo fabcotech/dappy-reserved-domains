@@ -15,6 +15,11 @@ if (Object.keys(invalids).length) {
 
 fs.writeFileSync('./name-purses.csv', Object.keys(validDomains).join(`;\n`), 'utf8');
 fs.writeFileSync('./name-purses.json', JSON.stringify(validDomains, null, 2), 'utf8');
+fs.writeFileSync('./reserved-domains.js', `module.exports = ` + JSON.stringify(
+  Object.fromEntries(
+    Object.entries(validDomains).map(([id]) => [id, true])
+  )
+  ,null, 2), 'utf-8');
 fs.writeFileSync('./reserved-domains.json', JSON.stringify(
     Object.fromEntries(
       Object.entries(validDomains).map(([id]) => [id, true])

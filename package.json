@@ -2,7 +2,7 @@
   "name": "dappy-reserved-domains",
   "version": "1.0.0",
   "description": "The dappy name system uses a rchain-token NFT contract. By default some purseswill be reserved, probably the top 3000 or top 5000 domain names. The list can be found on this page [amazonaws.com/umbrella-static/index.html](http://s3-us-west-1.amazonaws.com/umbrella-static/index.html)",
-  "main": "buildPursesForTopDomainNames.js",
+  "main": "reserved-domains.js",
   "scripts": {
     "test": "mocha **/*.spec.js",
     "test:watch": "mocha **/*.spec.js --watch",
